@@ -32,6 +32,6 @@ https://strukturag.github.io/libde265.js/
 
 
 
-uses video  tag inside 
+uses video tag inside: 
 
 https://github.com/Stanko/html-canvas-video-player
