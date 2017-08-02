@@ -1,0 +1,25 @@
+{
+  "name": "starshipplayer",
+  "version": "1.0.0",
+  "description": "h264 player task for starship",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobanko/starshipPlayer.git"
+  },
+  "author": "mishko.vladimir@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bobanko/starshipPlayer/issues"
+  },
+  "homepage": "https://github.com/bobanko/starshipPlayer#readme",
+  "devDependencies": {
+    "webpack": "^3.4.1"
+  },
+  "dependencies": {
+    "broadwayjs": "0.0.2"
+  }
+}
