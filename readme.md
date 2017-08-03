@@ -23,11 +23,13 @@ In case you have any questions, please don't hesitate to ask.
 
 found:
 
-https://github.com/defunctzombie/Broadway
+https://github.com/defunctzombie/Broadway - looks dirty
 
-https://github.com/131/h264-live-player
+https://github.com/131/h264-live-player - good
 
-https://strukturag.github.io/libde265.js/
+https://strukturag.github.io/libde265.js/ - looks well, but how to control playback?
+
+https://github.com/phoboslab/jsmpeg - looks cool
 
 uses video tag inside: 
 
