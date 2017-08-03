@@ -21,7 +21,6 @@ You *can* use some third party components where needed but you *must* understand
 
 In case you have any questions, please don't hesitate to ask.
 
-
 found:
 
 https://github.com/defunctzombie/Broadway
@@ -30,8 +29,9 @@ https://github.com/131/h264-live-player
 
 https://strukturag.github.io/libde265.js/
 
-
-
 uses video tag inside: 
 
 https://github.com/Stanko/html-canvas-video-player
+
+basic mockup:
+![basic mockup](mock.png)
