@@ -6,11 +6,7 @@ module.exports = class Streaming {
 
     constructor(source, onData, onClose) {
 
-        this.callbacks = [];
-
-        let server = null;
-
-        let feedRelay = new RemoteTCPFeedRelay(server, source);
+        let feedRelay = new RemoteTCPFeedRelay(source);
 
         let readStream = feedRelay.get_feed();
 

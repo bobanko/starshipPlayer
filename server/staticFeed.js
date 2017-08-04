@@ -4,8 +4,8 @@ const Throttle = require('stream-throttle').Throttle;
 
 class StaticFeed {
 
-    constructor(server, opts) {
-        this.options = opts;
+    constructor(options) {
+        this.options = options;
     }
 
     get_feed() {
