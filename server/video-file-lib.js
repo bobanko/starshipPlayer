@@ -12,13 +12,15 @@ class VideoFileLib {
     }
 
 
-
     getFiles(path, fileMask) {
         fs.readdir(path, (err, items) => {
 
-            items.filter(file => fileMask.test(file))
-                .map(file => this.getFileInfoAsync(path + file))
-                .map(p => p.then(info => this.fileIsReady(info)));
+            let promiseArr = items.filter(file => fileMask.test(file))
+                .map(file => path + file)
+                .map(filePath => this.getFileInfoAsync(filePath));
+
+            Promise.all(promiseArr).then(files => files.forEach(info => this.fileIsReady(info)));
+
         })
     }
 
