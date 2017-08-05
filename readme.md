@@ -1,6 +1,11 @@
 From provided link you can find a ZIP file of videos with their metadata.
+
 Each videofile consists of approximately 200 frames of video. 
+
 Filenames are organized based on videos first frame timestamp and camera name (5 in total).
+
+sample: `6D39_back_camera_left_1496764006.79_20170606_154646`
+
 Each line in .meta file is a timestamp of a corresponding frame in a video with the same base name.
 
 Please construct a video player that will:
@@ -12,9 +17,12 @@ Please construct a video player that will:
 - load fast - start the playback before all data is downloaded, lazy loading
 - do not overload CPU
 
-To finish the task, you also need to construct mini-server to serve the files from. You can choose the technology behind it but I recommend NodeJS stack.
+To finish the task, you also need to construct mini-server to serve the files from.
+ 
+You can choose the technology behind it but I recommend NodeJS stack.
 
 You *can not* alter the files or convert them in any way.
+
 You *can not* use flash or stock `<video>` tag.
 
 You *can* use some third party components where needed but you *must* understand and explain how it works.
@@ -29,7 +37,7 @@ https://github.com/131/h264-live-player - good
 
 https://strukturag.github.io/libde265.js/ - looks well, but how to control playback?
 
-https://github.com/phoboslab/jsmpeg - looks cool
+https://github.com/phoboslab/jsmpeg - looks best, but mpeg1 only :(
 
 uses video tag inside: 
 

@@ -21,9 +21,6 @@ class StaticFeed {
         console.log("Generate a static feed from ", source);
         return readStream;
     }
-
-
-
 }
 
 

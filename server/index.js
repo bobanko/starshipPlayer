@@ -1,7 +1,7 @@
 const httpServer = require('./http-server');
 const WsServer = require('./ws-server');
 
+httpServer({port: 9080});
 
-let wsServer = new WsServer({port: 9090});
-
-httpServer({port: 9080}, (data) => wsServer.send(data));
+let wsServer1 = new WsServer({ port: 9090});//server: httpServer, path: '/front',
+//let wsServer2 = new WsServer({server: httpServer, path: '/back', port: 9091});

@@ -1,6 +1,6 @@
 const Splitter = require('stream-split');
 const NALseparator = new Buffer([0, 0, 0, 1]);//NAL break
-const RemoteTCPFeedRelay = require('./staticFeed');
+const RemoteTCPFeedRelay = require('./static-feed');
 
 module.exports = class Streaming {
 

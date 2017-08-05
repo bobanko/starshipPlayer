@@ -1,10 +1,7 @@
 const WebSocket = require('ws');
+
 const Streaming = require('./streaming');
-
-
 const VideoFileLib = require('./video-file-lib');
-
-const NALseparator = new Buffer([0, 0, 0, 1]);//NAL break
 
 
 module.exports = class WsServer {
@@ -49,9 +46,10 @@ module.exports = class WsServer {
                 //todo: start stream file
                 console.log('start stream', file);
                 new Streaming(file, data => ws.send(data), () => {
-                    //todo: when done - get next file
+
                     console.log('stream ended');
                     if (fileLib.files.length > 0) {
+                        //todo: when done - get next file
                         setTimeout(() => startStream(fileLib.files.shift()), 0);
                     }
                 });
@@ -65,11 +63,5 @@ module.exports = class WsServer {
         console.log(`WS running on http://localhost:${ config.port }`);
 
     }
-
-    send(data) {
-        console.log('ws server send');
-        this._send(data);
-    }
-}
-;
+};
 

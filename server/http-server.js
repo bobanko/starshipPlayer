@@ -1,7 +1,9 @@
-module.exports = function (config, onData) {
+const http = require('http');
+const static = require('node-static');
 
-    const http = require('http');
-    const static = require('node-static');
+//just static node server to host html, may be altered by webpack dev server
+module.exports = function (config) {
+
     const file = new static.Server('.');
 
     http.createServer(function (req, res) {
@@ -9,9 +11,4 @@ module.exports = function (config, onData) {
     }).listen(config.port);
 
     console.log(`Server running on http://localhost:${config.port}`);
-
-
-
-
-
 };
