@@ -5,7 +5,7 @@ import {Player} from './player';
 const frameDecoder = new FrameDecoder(frameDecoder_onPictureDecoded);
 const player = new Player(document.querySelector('canvas'), 240, 144);
 
-const wsClient1 = new WsClient('ws://localhost:9090/front', wsClientOnFrameGot);
+const wsClient1 = new WsClient('ws://localhost:9091', wsClientOnFrameGot);
 
 
 function wsClientOnFrameGot(...args) {
