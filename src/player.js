@@ -25,8 +25,8 @@ export class Player {
         if (frame)
             this.decode(frame);
 
-        //requestAnimationFrame(() => this.shiftFrame());
-        setTimeout(() => this.shiftFrame(),1000/24);
+        requestAnimationFrame(() => this.shiftFrame());
+        //setTimeout(() => this.shiftFrame(),1000/24);
     }
 
 

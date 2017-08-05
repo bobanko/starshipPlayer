@@ -1,8 +1,8 @@
 const WebSocket = require('ws');
-
 const Streaming = require('./streaming');
-const VideoFileLib = require('./video-file-lib');
 
+
+const VideoFileLib = require('./video-file-lib');
 
 module.exports = class WsServer {
 
@@ -34,6 +34,9 @@ module.exports = class WsServer {
 
             function startStream(file) {
 
+                console.log('stream started with');
+                console.log(file);
+
                 //todo: get file + info
                 // let file = {
                 //     width: 240,//px
@@ -46,10 +49,9 @@ module.exports = class WsServer {
                 //todo: start stream file
                 console.log('start stream', file);
                 new Streaming(file, data => ws.send(data), () => {
-
+                    //todo: when done - get next file
                     console.log('stream ended');
                     if (fileLib.files.length > 0) {
-                        //todo: when done - get next file
                         setTimeout(() => startStream(fileLib.files.shift()), 0);
                     }
                 });
