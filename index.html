@@ -6,10 +6,25 @@
 </head>
 <body>
 
+
 canvas here
-<canvas width="240" height="134"></canvas>
+<div class="dashboard">
+    <div class="column">
+        <canvas class="left_stereo-left" width="240" height="134"></canvas>
+        <canvas class="back_camera_left" width="240" height="134"></canvas>
+    </div>
+    <div class="column">
+        <canvas class="front_camera" width="240" height="134"></canvas>
+    </div>
+    <div class="column">
+        <canvas class="right_stereo-left" width="240" height="134"></canvas>
+        <canvas class="back_camera_right" width="240" height="134"></canvas>
+    </div>
+</div>
 
 <button onclick="shiftFrame()">shift frame</button>
+
+<div class="fps">0</div>
 
 <script type="text/javascript" src="./dist/bundle.js"></script></body>
 </html>
