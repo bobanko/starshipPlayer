@@ -6,13 +6,31 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     entry: './src/index.js',
     output: {
-        filename: "./dist/bundle.js"
+        filename: './dist/bundle.js'
     },
 
     // watch: true,
     // watchOptions: {
     // 	aggregateTimeout: 100 //wait after changes //300 default
     // },
+    module: {
+        rules: [
+            {
+                test: /\.less$/,
+                use: [{
+                    loader: 'style-loader'
+                }, {
+                    loader: 'css-loader', options: {
+                        sourceMap: true
+                    }
+                }, {
+                    loader: 'less-loader', options: {
+                        sourceMap: true
+                    }
+                }]
+            },
+        ],
+    },
 
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
