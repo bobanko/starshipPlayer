@@ -1,0 +1,32 @@
+@camera_width: 240px;
+@camera_height: 134px;
+@camera_front_modifier: 1.5;
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard {
+  display: flex;
+
+  .column {
+    display: flex;
+    flex-direction: column;
+
+    canvas {
+      width: @camera_width;
+      height: @camera_height;
+
+      &.front_camera {
+        width: @camera_width*@camera_front_modifier;
+        height: @camera_height*@camera_front_modifier;
+      }
+    }
+
+  }
+}
