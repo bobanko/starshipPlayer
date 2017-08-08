@@ -1,63 +1,50 @@
 const WebSocket = require('ws');
-const Streaming = require('./streaming');
-
+const Rx = require('Rxjs');
 
 const VideoFileLib = require('./video-file-lib');
+const StreamerClient = require('./streamer-client');
+
+
+const CAMERA = {
+    FRONT: /front_camera/,
+    STEREO_LEFT: /left_stereo-left/,
+    STEREO_RIGHT: /right_stereo-left/,
+    BACK_LEFT: /back_camera_left/,
+    BACK_RIGHT: /back_camera_right/,
+};
 
 module.exports = class WsServer {
 
-    constructor(config, callback) {
-        console.log('ws server constructed');
 
+    constructor(config, callback) {
+        let fileLib = new VideoFileLib({path: './videos/', extensionMask: /.h264$/});
+
+        console.log('ws server constructed');
 
         const wss = new WebSocket.Server(config);
 
         wss.on('connection', (ws) => {
-            ws.on('message', function incoming(message) {
-                console.log('received: %s', message);
+            console.log('client connected');
+
+
+
+
+            let client = new StreamerClient((data)=>ws.send(data));
+            //client.connectStream();
+
+            client.startStreamSequence(fileLib.getFileStream(CAMERA.FRONT));
+
+            let wsSend = new Rx.Subject();
+            wsSend.subscribe(message => ws.send(message));
+
+
+
+            ws.on('message', function (message) {
+                console.log('received from client: %s', message);
+                client.message
             });
 
-            ws.send('stream started');
-
-            //todo: get file list
-
-            let fileLib = new VideoFileLib();
-            let isStarted = false;
-            fileLib.onFileReady(file => {
-                if (!isStarted) {
-                    startStream(fileLib.files.shift());
-                    isStarted = true;
-                }
-            });
-            fileLib.getFiles('./videos/', /.h264$/);
-
-
-            function startStream(file) {
-
-                console.log('stream started with');
-                console.log(file);
-
-                //todo: get file + info
-                // let file = {
-                //     width: 240,//px
-                //     height: 134,//px
-                //
-                //     filePath: 'videos/6D39_back_camera_left_1496764006.79_20170606_154646.h264',
-                //     duration: 5, //in seconds, should be multiplied to fps
-                // };
-
-                //todo: start stream file
-                console.log('start stream', file);
-                new Streaming(file, data => ws.send(data), () => {
-                    //todo: when done - get next file
-                    console.log('stream ended');
-                    if (fileLib.files.length > 0) {
-                        setTimeout(() => startStream(fileLib.files.shift()), 0);
-                    }
-                });
-
-            }
-
+            ws.on('close', () => client.dispose());
 
         });
 
