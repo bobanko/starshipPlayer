@@ -10,13 +10,6 @@ module.exports = class StreamerClient {
 
 
     startSubStream(fileInfo) {
-        // return Rx.Observable.create(function (observer) {
-        //     observer.next('Hello');
-        //     observer.next('World');
-        //
-        //     observer.complete('');
-        // });
-
         return new Promise((resolve, reject) => {
 
             getStaticFeedPipe(fileInfo).subscribe(data => this.wsSend(data), reject, resolve);

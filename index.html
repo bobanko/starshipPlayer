@@ -15,17 +15,23 @@
     <div class="column front">
         <canvas class="front_camera" width="240" height="134"></canvas>
         <div class="playback-control-panel">
+            <button>▶️</button>
+            <button>⏸</button>
+            <button>⏭</button>
+            <button>⏮</button>
+            <button>🔁</button>
+
+            <div class="fps">0</div>
             <select>
                 <option value="2.5">0.25</option>
                 <option value="5">0.5</option>
                 <option value="7.5">0.75</option>
                 <option value="10">normal</option>
-                <option value="12.5">1.25x</option>
-                <option value="15">1.5x</option>
-                <option value="20">2x</option>
+                <option value="12.5">1.25</option>
+                <option value="15">1.5</option>
+                <option value="20">2</option>
             </select>
-            <button onclick="shiftFrame()">shift frame</button>
-            <div class="fps">0</div>
+
         </div>
     </div>
     <div class="column">
