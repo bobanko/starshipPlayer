@@ -7,14 +7,32 @@
 <body>
 
 
-canvas here
 <div class="dashboard">
     <div class="column">
         <canvas class="left_stereo-left" width="240" height="134"></canvas>
         <canvas class="back_camera_left" width="240" height="134"></canvas>
     </div>
-    <div class="column">
+    <div class="column front">
         <canvas class="front_camera" width="240" height="134"></canvas>
+        <div class="playback-control-panel">
+            <button>▶️</button>
+            <button>⏸</button>
+            <button>⏭</button>
+            <button>⏮</button>
+            <button>🔁</button>
+
+            <div class="fps">0</div>
+            <select>
+                <option value="2.5">0.25</option>
+                <option value="5">0.5</option>
+                <option value="7.5">0.75</option>
+                <option value="10">normal</option>
+                <option value="12.5">1.25</option>
+                <option value="15">1.5</option>
+                <option value="20">2</option>
+            </select>
+
+        </div>
     </div>
     <div class="column">
         <canvas class="right_stereo-left" width="240" height="134"></canvas>
@@ -22,9 +40,6 @@ canvas here
     </div>
 </div>
 
-<button onclick="shiftFrame()">shift frame</button>
-
-<div class="fps">0</div>
 
 </body>
 </html>
