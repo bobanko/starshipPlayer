@@ -1,21 +1,20 @@
 const fs = require('fs');
+const getObservableFromStream = require('./../lib/rxjs.getObservableFromStream');
 const Throttle = require('stream-throttle').Throttle;
 
 const Splitter = require('stream-split');
 const NAL_SEPARATOR = new Buffer([0, 0, 0, 1]);//NAL break
 
 
-module.exports = function getStaticFeedPipe({filePath, duration}) {
+module.exports = function getStaticFeedPipe({filePath, fileSize, duration}) {
 
-    //throttle for "real time simulation"
-    const sourceThrottleRate = Math.floor(fs.statSync(filePath)['size'] / duration);
-
-    console.log('Generate a throttle rate of %s kBps', Math.floor(sourceThrottleRate / 1024));
-
-    let readStream = fs.createReadStream(filePath);
-    readStream = readStream.pipe(new Throttle({rate: sourceThrottleRate}));
-
-    console.log('Generate a static feed from ', filePath);
+    const sourceThrottleRate = Math.floor(fileSize / duration);
     const NAL_Splitter = new Splitter(NAL_SEPARATOR);
-    return readStream.pipe(NAL_Splitter);
+
+    let pipe = fs.createReadStream(filePath)
+		.pipe(new Throttle({rate: sourceThrottleRate}))
+		.pipe(NAL_Splitter);
+
+
+    return getObservableFromStream(pipe).map(data => Buffer.concat([NAL_SEPARATOR, data]));
 };
