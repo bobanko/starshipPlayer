@@ -1,3 +1,5 @@
+Task description
+---
 From provided link you can find a ZIP file of videos with their metadata.
 
 Each videofile consists of approximately 200 frames of video. 
@@ -17,11 +19,11 @@ Please construct a video player that will:
 - load fast - start the playback before all data is downloaded, lazy loading
 - do not overload CPU
 
-To finish the task, you also need to construct mini-server to serve the files from.
+To finish the task, you also need to construct mini-server to serve the fileInfos from.
  
 You can choose the technology behind it but I recommend NodeJS stack.
 
-You *can not* alter the files or convert them in any way.
+You *can not* alter the fileInfos or convert them in any way.
 
 You *can not* use flash or stock `<video>` tag.
 
@@ -29,8 +31,8 @@ You *can* use some third party components where needed but you *must* understand
 
 In case you have any questions, please don't hesitate to ask.
 
-found:
-
+tools found:
+---
 https://github.com/defunctzombie/Broadway - looks dirty
 
 https://github.com/131/h264-live-player - good
@@ -42,6 +44,3 @@ https://github.com/phoboslab/jsmpeg - looks best, but mpeg1 only :(
 uses video tag inside: 
 
 https://github.com/Stanko/html-canvas-video-player
-
-basic mockup:
-![basic mockup](mock.png)
