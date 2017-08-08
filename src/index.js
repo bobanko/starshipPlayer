@@ -11,13 +11,12 @@ let cameras = ['front_camera', 'left_stereo-left', 'right_stereo-left', 'back_ca
 cameras.forEach(cameraName => {
     const player = new Player(document.querySelector(`canvas.${cameraName}`), 240, 144);
     const wsClient = new WsClient('ws://localhost:9091', wsClientOnFrameGot);
-    const frameDecoder = new FrameDecoder(frameDecoder_onPictureDecoded);
+    const frameDecoder = new FrameDecoder();
+
+    frameDecoder.onFrameDecoded.subscribe((frame) => player.addFrame(frame));
 
     function wsClientOnFrameGot(...args) {
         frameDecoder.decode(...args);
     }
 
-    function frameDecoder_onPictureDecoded(frame) {
-        player.addFrame(frame);
-    }
 });

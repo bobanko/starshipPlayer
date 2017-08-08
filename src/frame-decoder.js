@@ -1,26 +1,18 @@
-//import * as Decoder from 'broadwayjs';
+const Rx = require('rxjs');
 import * as Decoder from '../lib/Decoder';
-
-
-//todo: rxify all this shit - as subj
-
-//.next(put frame here)
-
-//.subscribe(get decoded frame here)
-
 
 export class FrameDecoder {
 
+    constructor() {
+        let onFrameDecodedSubject = new Rx.Subject();
 
-    constructor(onPictureDecoded) {
         this.decoder = new Decoder();
+        this.decoder.onPictureDecoded = (...args)=> onFrameDecodedSubject.next(...args);
 
-        //todo: make rx
-        this.decoder.onPictureDecoded = onPictureDecoded;
+        this.onFrameDecoded = onFrameDecodedSubject.asObservable();
     }
 
     decode(frame) {
         this.decoder.decode(frame);
     }
-
 }
