@@ -13,44 +13,35 @@ const CAMERA = {
     BACK_RIGHT: /back_camera_right/,
 };
 
-module.exports = class WsServer {
+module.exports = function wsServer(config) {
+    let fileLib = new VideoFileLib({path: './videos/', extensionMask: /.h264$/});
+
+    console.log('ws server constructed');
+
+    const wss = new WebSocket.Server(config);
+
+    wss.on('connection', (ws) => {
+        console.log('client connected');
+
+        let client = new StreamerClient();
+
+        client.startStreamSequence(fileLib.getFileInfoObservable(CAMERA.FRONT));
+
+        client.onFrameReceived.subscribe((data) => ws.send(data));
+
+        let wsSend = new Rx.Subject();
+        wsSend.subscribe(message => ws.send(message));
 
 
-    constructor(config, callback) {
-        let fileLib = new VideoFileLib({path: './videos/', extensionMask: /.h264$/});
-
-        console.log('ws server constructed');
-
-        const wss = new WebSocket.Server(config);
-
-        wss.on('connection', (ws) => {
-            console.log('client connected');
-
-
-
-
-            let client = new StreamerClient((data)=>ws.send(data));
-            //client.connectStream();
-
-            client.startStreamSequence(fileLib.getFileStream(CAMERA.FRONT));
-
-            let wsSend = new Rx.Subject();
-            wsSend.subscribe(message => ws.send(message));
-
-
-
-            ws.on('message', function (message) {
-                console.log('received from client: %s', message);
-                client.message
-            });
-
-            ws.on('close', () => client.dispose());
-
+        ws.on('message', function (message) {
+            console.log('received from client: %s', message);
         });
 
+        ws.on('close', () => client.dispose());
 
-        console.log(`WS running on http://localhost:${ config.port }`);
+    });
 
-    }
+
+    console.log(`WS running on http://localhost:${ config.port }`);
 };
 
