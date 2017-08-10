@@ -31,7 +31,7 @@ function getFileInfoAsync(filePath) {
 }
 
 
-class VideoFileLib {
+module.exports = class VideoFileLib {
 
     constructor({path, extensionMask}) {
         this.fileInfos = [];
@@ -39,13 +39,13 @@ class VideoFileLib {
         this.loadFiles(path, extensionMask);
     }
 
-    getFileStream(fileNameMask = /./) {
+    getFileInfoObservable(fileNameMask = /./) {
         return Rx.Observable.from(this.fileInfos.filter(fileInfo => fileNameMask.test(fileInfo.filePath)));
     }
 
 
     loadFiles(path, extensionMask = /./) {
-        console.log('📹 start video file loading...')
+        console.log('📹 start video file loading...');
 
         fs.readdir(path, (err, items) => {
 
@@ -61,7 +61,4 @@ class VideoFileLib {
                 .then(() => console.log('📹 all video fileInfos loaded'));
         })
     }
-}
-
-
-module.exports = VideoFileLib;
+};

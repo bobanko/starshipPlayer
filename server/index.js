@@ -1,6 +1,6 @@
 const httpServer = require('./http-server');
-const WsServer = require('./ws-server');
+const wsServer = require('./ws-server');
 
 httpServer({port: 9080});
 
-let wsServer = new WsServer({port: 9091});
+wsServer({port: 9091});

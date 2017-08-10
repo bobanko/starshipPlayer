@@ -17,12 +17,7 @@ export class WsClient {
 
     //todo: hide all these methods to private
     onClose(event) {
-        if (event.wasClean) {
-            console.log('Соединение закрыто чисто');
-        } else {
-            console.log('Обрыв соединения'); // например, "убит" процесс сервера
-        }
-        console.log('Код: ' + event.code + ' причина: ' + event.reason);
+        console.log(`🌐ws closed ${event.wasClean ? 'ok 🖤' : 'bad 💔'} code: ${event.code }, reason: ${event.reason }`);
     }
 
 
