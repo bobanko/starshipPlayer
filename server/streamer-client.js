@@ -1,13 +1,11 @@
-const Rx = require('rxjs');
+const Rx = require('rxjs/Rx');
 
 const getStaticFeedPipe = require('./get-static-feed');
 
 module.exports = class StreamerClient {
-
     constructor() {
         this.onFrameReceived = new Rx.Subject();
     }
-
 
     startSubStream(fileInfo) {
         return Rx.Observable.create((observer) => {

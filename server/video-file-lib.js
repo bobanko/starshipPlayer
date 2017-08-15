@@ -3,7 +3,7 @@ const fs = require('fs');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 
-const Rx = require('Rxjs');
+const Rx = require('rxjs/Rx');
 
 
 function mapFileInfo(fileInfo, filePath) {

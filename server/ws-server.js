@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const Rx = require('Rxjs');
+const Rx = require('rxjs/Rx');
 
 const VideoFileLib = require('./video-file-lib');
 const StreamerClient = require('./streamer-client');

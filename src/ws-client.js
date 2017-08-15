@@ -1,3 +1,5 @@
+import Rx from 'rxjs/Rx';
+
 export class WsClient {
 
     constructor(url, onFrameGot) {

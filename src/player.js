@@ -1,5 +1,5 @@
 //import { Observable } from 'rxjs';
-import * as Rx from 'rxjs';
+import * as Rx from 'rxjs/Rx';
 
 const SEC = 1000;
 
