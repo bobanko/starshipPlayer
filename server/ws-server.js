@@ -5,14 +5,6 @@ const VideoFileLib = require('./video-file-lib');
 const StreamerClient = require('./streamer-client');
 
 
-const CAMERA = {
-    FRONT: /front_camera/,
-    STEREO_LEFT: /left_stereo-left/,
-    STEREO_RIGHT: /right_stereo-left/,
-    BACK_LEFT: /back_camera_left/,
-    BACK_RIGHT: /back_camera_right/,
-};
-
 module.exports = function wsServer(config) {
     let fileLib = new VideoFileLib({path: './videos/', extensionMask: /.h264$/});
 
@@ -25,8 +17,6 @@ module.exports = function wsServer(config) {
 
         let client = new StreamerClient();
 
-        client.startStreamSequence(fileLib.getFileInfoObservable(CAMERA.FRONT));
-
         client.onFrameReceived.subscribe((data) => ws.send(data));
 
         let wsSend = new Rx.Subject();
@@ -35,6 +25,8 @@ module.exports = function wsServer(config) {
 
         ws.on('message', function (message) {
             console.log('received from client: %s', message);
+            let fileNameRegex = new RegExp(message, 'i');
+            client.startStreamSequence(fileLib.getFileInfoObservable(fileNameRegex));
         });
 
         ws.on('close', () => client.dispose());

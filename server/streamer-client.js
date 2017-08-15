@@ -29,6 +29,7 @@ module.exports = class StreamerClient {
 
 
     dispose() {
+        this.onFrameReceived.complete();
         delete this;//?
         //todo: dispose all shit
     }

@@ -9,15 +9,15 @@ import './dashboard.less';
 let cameras = ['front_camera', 'left_stereo-left', 'right_stereo-left', 'back_camera_left', 'back_camera_right'];
 
 
+
 cameras.forEach(cameraName => {
     const player = new Player(document.querySelector(`canvas.${cameraName}`), 240, 144);
-    const wsClient = new WsClient(`ws://localhost:${config.wsPort}`, wsClientOnFrameGot);
-    const frameDecoder = new FrameDecoder();
 
+    const frameDecoder = new FrameDecoder();
     frameDecoder.onFrameDecoded.subscribe((frame) => player.addFrame(frame));
 
-    function wsClientOnFrameGot(...args) {
-        frameDecoder.decode(...args);
-    }
+    const wsClient = new WsClient({url: `ws://localhost:${config.wsPort}`, fileMask: cameraName});
+
+    wsClient.onFrameGot.subscribe(frame => frameDecoder.decode(frame));
 
 });
