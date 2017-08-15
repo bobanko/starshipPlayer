@@ -1,6 +1,7 @@
 import {WsClient} from './ws-client';
 import {FrameDecoder} from './frame-decoder';
 import {Player} from './player';
+import config from './../config';
 
 import './dashboard.less';
 
@@ -10,7 +11,7 @@ let cameras = ['front_camera', 'left_stereo-left', 'right_stereo-left', 'back_ca
 
 cameras.forEach(cameraName => {
     const player = new Player(document.querySelector(`canvas.${cameraName}`), 240, 144);
-    const wsClient = new WsClient('ws://localhost:9091', wsClientOnFrameGot);
+    const wsClient = new WsClient(`ws://localhost:${config.wsPort}`, wsClientOnFrameGot);
     const frameDecoder = new FrameDecoder();
 
     frameDecoder.onFrameDecoded.subscribe((frame) => player.addFrame(frame));

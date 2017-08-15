@@ -3,6 +3,8 @@
 const webpack = require('webpack');// need to be installed locally npm i webpack
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const config = require('./config');
+
 module.exports = {
     entry: './src/index.js',
     output: {
@@ -46,6 +48,7 @@ module.exports = {
     devServer: {
         //host: 'localhost', //default
         //port: 8080, //default
+        port: config.httpPort,
         contentBase: './dist',
         hot: true,
     }
