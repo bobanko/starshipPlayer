@@ -1,11 +1,18 @@
-//import { Observable } from 'rxjs';
 import * as Rx from 'rxjs/Rx';
+
+import {PlaybackComponent} from './playback-component';
 
 const SEC = 1000;
 
+let playbackSelector = {
+    cache: '.playback-cache',
+    progress: '.playback-progress',
+    handler: '.playback-handler',
+};
+
 export class Player {
 
-    constructor(canvas) {
+    constructor(playerSelector) {
 
         this.frameList = [];
 
@@ -17,8 +24,11 @@ export class Player {
         //     .map(frame => {return frame;})
         //     .subscribe(frame => this.decode(frame));
 
-        this.canvas = canvas;
-        this.canvasCtx = this.canvas.getContext("2d");
+        this.$playbackCache = new PlaybackComponent(`${playerSelector} ${playbackSelector.cache}`);
+        this.$playbackProgress = new PlaybackComponent(`${playerSelector} ${playbackSelector.progress}`);
+
+        this.canvas = document.querySelector(`${playerSelector}>canvas`);
+        this.canvasCtx = this.canvas.getContext('2d');
         this.canvasBuffer = this.canvasCtx.createImageData(this.canvas.width, this.canvas.height);
 
         //start playing
@@ -45,16 +55,13 @@ export class Player {
         //this.animate();
 
         setInterval(() => this.shiftFrame(), SEC / 10);
-
-
-        window.shiftFrame = () => this.shiftFrame();
     }
 
     addFrame(frame) {
         this.frameList.push(frame);
-
         this.frameListSubject.next(frame);
 
+        this.$playbackCache.value++;
     }
 
 
@@ -62,8 +69,11 @@ export class Player {
         const frame = this.frameList.shift();
 
         //todo: decode frames zaranee
-        if (frame)
+        if (frame) {
             this.decode(frame);
+            this.$playbackProgress.value++;
+        }
+
 
         //requestAnimationFrame(() => this.shiftFrame());
         //setTimeout(() => this.shiftFrame(),1000/24);
