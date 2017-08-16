@@ -1,6 +1,4 @@
-@camera_width: 240px;
-@camera_height: 134px;
-@camera_front_modifier: 1.5;
+@import 'player';
 
 body {
   display: flex;
@@ -17,27 +15,5 @@ body {
   .column {
     display: flex;
     flex-direction: column;
-
-    canvas {
-      width: @camera_width;
-      height: @camera_height;
-
-      @canvas_bg: gray;
-
-      background-color: @canvas_bg;
-      box-shadow: inset 0px 0px 0px 1px lighten(@canvas_bg, 10%);
-      border: 1px solid lighten(@canvas_bg, 10%);
-
-      &.front_camera {
-        width: @camera_width*@camera_front_modifier;
-        height: @camera_height*@camera_front_modifier;
-      }
-    }
-
   }
-}
-
-.playback-control-panel{
-  display: flex;
-  justify-content: center;
 }
