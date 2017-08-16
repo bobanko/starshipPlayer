@@ -9,11 +9,39 @@
 
 <div class="dashboard">
     <div class="column">
-        <canvas class="left_stereo-left" width="240" height="134"></canvas>
-        <canvas class="back_camera_left" width="240" height="134"></canvas>
+        <div class="player left_stereo-left">
+            <canvas width="240" height="134"></canvas>
+            <div class="playback-bar">
+                <div class="playback-cache"></div>
+                <div class="playback-progress">
+                    <div class="playback-handler"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="player back_camera_right">
+            <canvas width="240" height="134"></canvas>
+            <div class="playback-bar">
+                <div class="playback-cache"></div>
+                <div class="playback-progress">
+                    <div class="playback-handler"></div>
+                </div>
+
+            </div>
+        </div>
     </div>
     <div class="column front">
-        <canvas class="front_camera" width="240" height="134"></canvas>
+
+        <div class="player front_camera">
+            <canvas width="240" height="134"></canvas>
+            <div class="playback-bar">
+                <div class="playback-cache"></div>
+                <div class="playback-progress">
+                    <div class="playback-handler"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="playback-control-panel">
             <button>▶️</button>
             <button>⏸</button>
@@ -26,17 +54,38 @@
                 <option value="2.5">0.25</option>
                 <option value="5">0.5</option>
                 <option value="7.5">0.75</option>
-                <option value="10">normal</option>
+                <option value="10" selected>normal</option>
                 <option value="12.5">1.25</option>
                 <option value="15">1.5</option>
                 <option value="20">2</option>
             </select>
-
         </div>
+        <div class="playback-control-panel">
+            some debug info here
+        </div>
+
+
     </div>
     <div class="column">
-        <canvas class="right_stereo-left" width="240" height="134"></canvas>
-        <canvas class="back_camera_right" width="240" height="134"></canvas>
+        <div class="player right_stereo-left">
+            <canvas width="240" height="134"></canvas>
+            <div class="playback-bar">
+                <div class="playback-cache"></div>
+                <div class="playback-progress">
+                    <div class="playback-handler"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="player back_camera_left">
+            <canvas width="240" height="134"></canvas>
+            <div class="playback-bar">
+                <div class="playback-cache"></div>
+                <div class="playback-progress">
+                    <div class="playback-handler"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
