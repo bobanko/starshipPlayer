@@ -1,8 +1,9 @@
-import * as Rx from 'rxjs/Rx';
+import * as Rx from "rxjs/Rx";
 
-import {PlaybackComponent} from './playback-component';
+import {PlaybackComponent} from "./playback-component";
 
 const SEC = 1000;
+const defaultFrameSkip = 50;
 
 let playbackSelector = {
     cache: '.playback-cache',
@@ -10,13 +11,14 @@ let playbackSelector = {
     handler: '.playback-handler',
 };
 
+
 export class Player {
 
     constructor(playerSelector) {
 
         this.frameList = [];
-
-        this.frameListSubject = new Rx.Subject();
+        this.totalFrameCount = 0;
+        //this.frameListSubject = new Rx.Subject();
 
         // this.frameListSubject
         // //.throttleTime(100)
@@ -24,8 +26,14 @@ export class Player {
         //     .map(frame => {return frame;})
         //     .subscribe(frame => this.decode(frame));
 
-        this.$playbackCache = new PlaybackComponent(`${playerSelector} ${playbackSelector.cache}`);
-        this.$playbackProgress = new PlaybackComponent(`${playerSelector} ${playbackSelector.progress}`);
+        this.$playbackCache = new PlaybackComponent({
+            selector: `${playerSelector} ${playbackSelector.cache}`,
+            //totalFrameCount: this.totalFrameCount
+        });
+        this.$playbackProgress = new PlaybackComponent({
+            selector: `${playerSelector} ${playbackSelector.progress}`,
+            //totalFrameCount: this.totalFrameCount
+        });
 
         this.canvas = document.querySelector(`${playerSelector}>canvas`);
         this.canvasCtx = this.canvas.getContext('2d');
@@ -38,6 +46,7 @@ export class Player {
 
         //fps counter
         let lastSampleTime = 0;
+
         this.frameCount = 0;
         setInterval(() => {
             let now = performance.now();
@@ -55,23 +64,64 @@ export class Player {
         //this.animate();
 
         setInterval(() => this.shiftFrame(), SEC / 10);
+
+        this.currentFrameIndex = 0;
+        this.isPaused = false;
+    }
+
+    //PLAYER API
+    play() {
+        this.isPaused = false;
+    }
+
+    pause() {
+        this.isPaused = true;
+    }
+
+    forward(frames = defaultFrameSkip) {
+        this.pause();
+        this.currentFrameIndex = Math.min(this.currentFrameIndex + frames, this.totalFrameCount);
+        this.play();
+        console.log('fw');
+    }
+
+    backward(frames = defaultFrameSkip) {
+        this.pause();
+        this.currentFrameIndex = Math.max(this.currentFrameIndex - frames, 0);
+        this.play();
+        console.log('bw');
+    }
+
+    rewind() {
+        this.pause();
+        this.currentFrameIndex = 0;
+        this.play();
+    }
+
+
+    setTotalFrameCount(count) {
+        this.$playbackCache.totalFrameCount = this.$playbackProgress.totalFrameCount = this.totalFrameCount = count;
     }
 
     addFrame(frame) {
         this.frameList.push(frame);
-        this.frameListSubject.next(frame);
+        //this.frameListSubject.next(frame);
 
         this.$playbackCache.value++;
     }
 
 
     shiftFrame() {
-        const frame = this.frameList.shift();
+        this.$playbackProgress.value = this.currentFrameIndex;
 
-        //todo: decode frames zaranee
+        if (this.isPaused)return;
+        //const frame = this.frameList.shift();
+        const frame = this.frameList[this.currentFrameIndex++];
+
+        //todo: decode frames before this
         if (frame) {
             this.decode(frame);
-            this.$playbackProgress.value++;
+            console.log(`current frame: ${this.currentFrameIndex}/ ${ this.frameList.length}`);
         }
 
 
@@ -82,6 +132,7 @@ export class Player {
     animate(now) {
         // request another frame
         requestAnimationFrame((time) => this.animate(time));
+        if (this.isPaused)return;
 
         // calc elapsed time since last loop
         let elapsed = now - this.lastDrawTime;
