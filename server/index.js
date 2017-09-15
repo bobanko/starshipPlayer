@@ -3,5 +3,6 @@ const wsServer = require('./ws-server');
 
 const config = require('../config');
 
-httpServer({port: config.httpPort});
-wsServer({port: config.wsPort});
+//httpServer({port: config.httpPort});
+
+wsServer(config);
