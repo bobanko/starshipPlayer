@@ -6,7 +6,7 @@ const StreamerClient = require('./streamer-client');
 
 
 module.exports = function wsServer(config) {
-    let fileLib = new VideoFileLib({path: './videos/', extensionMask: /.h264$/});
+    let fileLib = new VideoFileLib({path: config.videosDir, extensionMask: /.h264$/});
 
     console.log('ws server constructed');
 
@@ -27,6 +27,9 @@ module.exports = function wsServer(config) {
             console.log('received from client: %s', message);
             let fileNameRegex = new RegExp(message, 'i');
             client.startStreamSequence(fileLib.getFileInfoObservable(fileNameRegex));
+
+            let frameCountMessage = JSON.stringify({frameCount: fileLib.getFileInfosTotalFrames(fileNameRegex)});
+            wsSend.next(frameCountMessage);
         });
 
         ws.on('close', () => client.dispose());

@@ -20,14 +20,30 @@ export class WsClient {
             this.socket.send(fileMask);
         });
 
+        this.totalFrameCount = null;
         this._onFrame = new Rx.Subject();
+        this._onFrameCount = new Rx.Subject();
         this.onFrameGot = this._onFrame.asObservable();
+        this.onFrameCountGot = this._onFrameCount.asObservable();
     }
 
 
     onMessage(event) {
         if (typeof event.data === 'string') {
             console.log(`🌐ws data received: ${event.data}`);
+
+            try {
+                let messageObj = JSON.parse(event.data);
+
+                let frameCount = messageObj['frameCount'];
+                if (frameCount !== undefined) {
+                    this._onFrameCount.next(frameCount);
+                    this._onFrameCount.complete();
+                }
+            }catch (err){
+                console.warn(err);
+            }
+
             return;
         }
 

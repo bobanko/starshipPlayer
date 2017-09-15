@@ -1,8 +1,9 @@
 /* controls playback elements appearance */
 export class PlaybackComponent {
-    constructor(selector) {
+    constructor({selector, totalFrameCount = 1}) {
         this._element = document.querySelector(selector);
         this._value = 0;
+        this.totalFrameCount = totalFrameCount;
     }
 
     get value() {
@@ -15,8 +16,7 @@ export class PlaybackComponent {
     }
 
     update() {
-        const totalFrameCount = 10600;//todo: calc this value on server
-        let percentage = Math.floor(this._value / totalFrameCount * 100);
+        let percentage = Math.floor(this._value / this.totalFrameCount * 100);
         this._element.style.width = `${percentage}%`;
     }
 }

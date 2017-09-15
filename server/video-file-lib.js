@@ -30,6 +30,7 @@ function getFileInfoAsync(filePath) {
     });
 }
 
+const defaultFileNameMask = /./;
 
 module.exports = class VideoFileLib {
 
@@ -39,13 +40,25 @@ module.exports = class VideoFileLib {
         this.loadFiles(path, extensionMask);
     }
 
-    getFileInfoObservable(fileNameMask = /./) {
-        return Rx.Observable.from(this.fileInfos.filter(fileInfo => fileNameMask.test(fileInfo.filePath)));
+
+    getFileInfoObservable(fileNameMask = defaultFileNameMask) {
+        return Rx.Observable.from(this.getFileInfosByMask(fileNameMask));
     }
 
+    getFileInfosByMask(fileNameMask = defaultFileNameMask) {
+        return this.fileInfos.filter(fileInfo => fileNameMask.test(fileInfo.filePath));
+    }
+
+    getFileInfosTotalFrames(fileNameMask = defaultFileNameMask) {
+        let fileInfos = this.getFileInfosByMask(fileNameMask);
+
+        return fileInfos.reduce((total, fi) => {
+            return total + fi.frameCount;
+        }, 0);
+    }
 
     loadFiles(path, extensionMask = /./) {
-        console.log('📹 start video file loading...');
+        console.log('📹 loading video files...');
 
         fs.readdir(path, (err, items) => {
 
@@ -58,7 +71,7 @@ module.exports = class VideoFileLib {
 
             Promise.all(promiseArr)
                 .then(files => files.forEach(fileInfo => this.fileInfos.push(fileInfo)))
-                .then(() => console.log('📹 all video fileInfos loaded'));
+                .then(() => console.log('📹 all videos loaded'));
         })
     }
 };
