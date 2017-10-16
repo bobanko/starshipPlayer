@@ -1,5 +1,5 @@
 const Rx = require('rxjs/Rx');
-import * as Decoder from '../lib/Decoder';
+import * as Decoder from "../lib/Decoder";
 
 export class FrameDecoder {
 
@@ -7,12 +7,9 @@ export class FrameDecoder {
         let onFrameDecodedSubject = new Rx.Subject();
 
         this.decoder = new Decoder();
-        this.decoder.onPictureDecoded = (...args)=> onFrameDecodedSubject.next(...args);
+        this.decoder.onPictureDecoded = (...args) => onFrameDecodedSubject.next(...args);
 
         this.onFrameDecoded = onFrameDecodedSubject.asObservable();
-    }
-
-    decode(frame) {
-        this.decoder.decode(frame);
+        this.decode = (frame) => this.decoder.decode(frame);
     }
 }
