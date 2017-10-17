@@ -5,7 +5,7 @@ import config from './../config';
 
 import './dashboard.less';
 
-let cameras = [/*'front_camera', 'left_stereo-left', 'right_stereo-left', 'back_camera_left',*/ 'back_camera_right'];
+let cameras = ['front_camera', 'left_stereo-left', 'right_stereo-left', 'back_camera_left', 'back_camera_right'];
 
 cameras.forEach(cameraName => {
     let playerSelector = `.player.${cameraName}`;
