@@ -51,7 +51,7 @@ export class Player {
 
         let $playbackBar = document.querySelector(`${playerSelector} ${playbackSelector.bar}`);
         $playbackBar.addEventListener('click', (event) => {
-            let max = event.srcElement.clientWidth;
+            let max = $playbackBar.clientWidth;
             let current = event.layerX;
 
             let percentage = current/max;
