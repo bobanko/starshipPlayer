@@ -1,11 +1,24 @@
-import * as Rx from "rxjs/Rx";
+import * as Rx from 'rxjs/Rx';
 
-import {PlaybackComponent} from "./playback-component";
+import {PlaybackComponent} from './playback-component';
+import * as config from '../config';
 
 const SEC = 1000;
-const defaultFrameSkip = 50;
+const defaultFPS = 30;
+const defaultFrameSkip = 100;
+
+const speeds = [
+    { name: '0.25',		value: defaultFPS * .25 },
+    { name: '0.5',		value: defaultFPS * .5 },
+    { name: '0.75',		value: defaultFPS * .75 },
+    { name: 'normal',	value: defaultFPS },
+    { name: '1.25',		value: defaultFPS * 1.25 },
+    { name: '1.5',		value: defaultFPS * 1.5 },
+    { name: '2',		value: defaultFPS * 2 },
+];
 
 let playbackSelector = {
+    bar: '.playback-bar',
     cache: '.playback-cache',
     progress: '.playback-progress',
     handler: '.playback-handler',
@@ -35,9 +48,25 @@ export class Player {
             //totalFrameCount: this.totalFrameCount
         });
 
+
+        let $playbackBar = document.querySelector(`${playerSelector} ${playbackSelector.bar}`);
+        $playbackBar.addEventListener('click', (event) => {
+            let max = event.srcElement.clientWidth;
+            let current = event.layerX;
+
+            let percentage = current/max;
+            let frameIndex = Math.floor(this.totalFrameCount * percentage);
+
+            this.shiftFrame(frameIndex);
+        });
+
+
+
         this.canvas = document.querySelector(`${playerSelector}>canvas`);
         this.canvasCtx = this.canvas.getContext('2d');
         this.canvasBuffer = this.canvasCtx.createImageData(this.canvas.width, this.canvas.height);
+
+
 
         //start playing
         //this.shiftFrame();
@@ -59,17 +88,30 @@ export class Player {
         }, SEC);
 
 
-        this.fpsInterval = SEC / 60;
-        this.lastDrawTime = performance.now();
-        //this.animate();
-
-        setInterval(() => this.shiftFrame(), SEC / 10);
+        this.setPlaybackSpeed('normal');
+        this.animateSimple();
 
         this.currentFrameIndex = 0;
         this.isPaused = false;
+
+        this.frameIndex = 0;
+
+        this.framesDrawed = 0;
+        this.currentFPS = 0;
+
+        //todo: make fps component
+        setInterval(()=>{
+            this.currentFPS = this.framesDrawed;
+            this.framesDrawed = 0;
+        },SEC);
     }
 
     //PLAYER API
+
+    setPlaybackSpeed(speed = 'normal'){
+        this.fpsInterval = SEC / speeds.find(x => x.name === speed).value;
+    }
+
     play() {
         this.isPaused = false;
     }
@@ -82,14 +124,12 @@ export class Player {
         this.pause();
         this.currentFrameIndex = Math.min(this.currentFrameIndex + frames, this.totalFrameCount);
         this.play();
-        console.log('fw');
     }
 
     backward(frames = defaultFrameSkip) {
         this.pause();
         this.currentFrameIndex = Math.max(this.currentFrameIndex - frames, 0);
         this.play();
-        console.log('bw');
     }
 
     rewind() {
@@ -103,31 +143,81 @@ export class Player {
         this.$playbackCache.totalFrameCount = this.$playbackProgress.totalFrameCount = this.totalFrameCount = count;
     }
 
+
+
     addFrame(frame) {
-        this.frameList.push(frame);
-        //this.frameListSubject.next(frame);
+        this.frameList.push({frame, timestamp: +new Date(), index: this.frameIndex++});
 
         this.$playbackCache.value++;
     }
 
 
-    shiftFrame() {
-        this.$playbackProgress.value = this.currentFrameIndex;
 
-        if (this.isPaused)return;
-        //const frame = this.frameList.shift();
-        const frame = this.frameList[this.currentFrameIndex++];
+    shiftFrame(frameIndex) {
 
-        //todo: decode frames before this
-        if (frame) {
-            this.decode(frame);
-            console.log(`current frame: ${this.currentFrameIndex}/ ${ this.frameList.length}`);
+        if(frameIndex !== undefined) {
+            this.currentFrameIndex = frameIndex;
         }
 
+        this.$playbackProgress.value =this.currentFrameIndex;
 
-        //requestAnimationFrame(() => this.shiftFrame());
-        //setTimeout(() => this.shiftFrame(),1000/24);
+        if (this.isPaused)return;
+
+        //const frame = this.frameList[this.currentFrameIndex].frame;
+
+        const frameObj =this.frameList.find(x=> x.index === this.currentFrameIndex);
+        //todo: decode frames before this
+        if (frameObj) {
+            const frame = frameObj.frame;
+
+            let decodedFrameBuffer = this.decode(frame);
+
+            this.canvasCtx.putImageData(decodedFrameBuffer, 0, 0);
+
+            this.drawText(this.canvasCtx, {
+                text: `curr:${this.currentFrameIndex}/cached:${ this.frameList.length}/total:${this.totalFrameCount}`,
+                x: 0, y: 120
+            });
+
+            this.drawText(this.canvasCtx, {
+                text: `FPS:${this.currentFPS}`,
+                x: 190, y: 15
+            });
+
+            this.currentFrameIndex++;
+        }
     }
+
+
+    drawText(ctx, { text = 'no text', font = 'monospace', size = 14, color = 'black', shadow = 'white', x = 0, y = 0 }){
+        ctx.font = `${size}px ${font}`;
+        ctx.fillStyle = color;
+        //shadow
+        ctx.shadowColor = shadow;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+        ctx.shadowBlur = 0;
+
+        this.canvasCtx.fillText(text, x, y);
+    }
+
+
+    animateSimple(){
+        if (!this.isPaused) {
+            this.shiftFrame();
+            this.framesDrawed++;
+        }
+
+        setTimeout(() => {
+            this.animateSimple();
+        }, this.fpsInterval);
+
+        //todo: use this
+        //requestAnimationFrame(() => this.animateSimple());
+    }
+
+
+
 
     animate(now) {
         // request another frame
@@ -160,9 +250,12 @@ export class Player {
     }
 
 
-    decode(buffer, width = 240, height = 144) {
+
+    decode(buffer, width = config.videoSize.width, height = config.videoSize.height) {
         if (!buffer)
             return;
+
+        const canvasBuffer = new ImageData(width, height);
 
         const lumaSize = width * height;
         const chromaSize = lumaSize >> 2;
@@ -181,13 +274,13 @@ export class Player {
                 const B = 1.164 * (ybuf[yIndex] - 16) + 2.018 * (ubuf[uIndex] - 128);
 
                 const rgbIndex = yIndex * 4;
-                this.canvasBuffer.data[rgbIndex + 0] = R;
-                this.canvasBuffer.data[rgbIndex + 1] = G;
-                this.canvasBuffer.data[rgbIndex + 2] = B;
-                this.canvasBuffer.data[rgbIndex + 3] = 0xff;
+                canvasBuffer.data[rgbIndex + 0] = R;
+                canvasBuffer.data[rgbIndex + 1] = G;
+                canvasBuffer.data[rgbIndex + 2] = B;
+                canvasBuffer.data[rgbIndex + 3] = 0xff;
             }
         }
 
-        this.canvasCtx.putImageData(this.canvasBuffer, 0, 0);
+        return canvasBuffer;
     }
 }
