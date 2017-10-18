@@ -6,38 +6,66 @@ const ffprobeStatic = require('ffprobe-static');
 const Rx = require('rxjs/Rx');
 
 
-function mapFileInfo(fileInfo, filePath) {
+//todo: make async
+function readMetaFile(metaFilePath){
+    let metaData = fs.readFileSync(metaFilePath);
+    let metaArr = metaData.toString().split('\n');
+    return metaArr;
+}
+
+function mapFileInfo(fileInfo, filePair) {
+
+    let meta = readMetaFile(filePair.meta);
+    const frameRate = 40; //to get duration === 5
     return {
-        filePath: filePath,
-        fileSize: fs.statSync(filePath)['size'],
+        meta,
+        filePath: filePair.video,
+        //todo: make async
+        fileSize: fs.statSync(filePair.video)['size'],
         width: fileInfo.width,
         height: fileInfo.height,
-        frameCount: /*fileInfo.nb_frames ||*/ 200, //todo: missing
-        duration: /*fileInfo.duration ||*/ 5, //todo: missing
+        frameCount: meta.length,
+        duration: meta.length / frameRate,
         frameRate: fileInfo.r_frame_rate,
     }
 }
 
+function getFileInfoAsync(filePair) {
+    return new Promise((resolve, reject) => {
 
-function getFileInfoAsync(filePath) {
-    return new Promise(function (resolve, reject) {
-        ffprobe(filePath, {path: ffprobeStatic.path}, function (err, info) {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(mapFileInfo(info.streams[0], filePath));
+        ffprobe(filePair.video, {path: ffprobeStatic.path}, (err, info) => {
+            if (err) return reject(err);
+
+            resolve(mapFileInfo(info.streams[0], filePair));
+        });
+
+    });
+}
+
+function getDirFilesAsync(dirPath){
+    return new Promise((resolve, reject) => {
+        fs.readdir(dirPath, (err, items) => {
+            if(err) return reject(err);
+
+            let fileInfosPromiseArr = items
+                .sort((fileName1, fileName2) => fileName1 - fileName2)
+                .map(fileName => dirPath + fileName);
+
+            Promise.all(fileInfosPromiseArr).then((fileNames) => resolve(fileNames));
         });
     });
 }
+
 
 const defaultFileNameMask = /./;
 
 module.exports = class VideoFileLib {
 
-    constructor({path, extensionMask}) {
+    constructor({path, videoExtensionMask}) {
         this.fileInfos = [];
 
-        this.loadFiles(path, extensionMask);
+
+        this.loadFiles(path, videoExtensionMask);
     }
 
 
@@ -57,21 +85,31 @@ module.exports = class VideoFileLib {
         }, 0);
     }
 
-    loadFiles(path, extensionMask = /./) {
+
+
+
+
+    async loadFiles(path, videoExtensionMask = /./) {
         console.log('📹 loading video files...');
 
-        fs.readdir(path, (err, items) => {
+        let dirFiles = await getDirFilesAsync(path);
 
-            let promiseArr = items
-                .filter(fileName => extensionMask.test(fileName))
-                .sort((fileName1, fileName2) => fileName1 - fileName2)
-                .map(fileName => path + fileName)
-                .map(filePath => getFileInfoAsync(filePath));
+        //todo: could be lag here, due to sync chain: loadfiles -> getfileinfos
+
+        function getMetaFileName(videoFileName){
+            return videoFileName.replace(videoExtensionMask, '$1.meta')
+        }
 
 
-            Promise.all(promiseArr)
-                .then(files => files.forEach(fileInfo => this.fileInfos.push(fileInfo)))
-                .then(() => console.log('📹 all videos loaded'));
-        })
+        let fileInfosPromiseArr = dirFiles
+            .filter(fileName => videoExtensionMask.test(fileName))
+            .map(filePath => ({ video: filePath, meta: getMetaFileName(filePath) }))
+            .map(filePair => getFileInfoAsync(filePair));
+
+        let fileInfos = await Promise.all(fileInfosPromiseArr);
+
+        this.fileInfos.push(...fileInfos);
+
+        console.log('📹 all videos loaded');
     }
 };

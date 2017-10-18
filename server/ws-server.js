@@ -6,7 +6,7 @@ const StreamerClient = require('./streamer-client');
 
 
 module.exports = function wsServer(config) {
-    let fileLib = new VideoFileLib({path: config.videosDir, extensionMask: /.h264$/});
+    let fileLib = new VideoFileLib({path: config.videosDir, videoExtensionMask: /(.+).h264$/});
 
     console.log('ws server constructed');
 
