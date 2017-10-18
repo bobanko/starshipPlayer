@@ -18,3 +18,18 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.perspective {
+  @scale: 1.22;
+  perspective: 500px;
+  perspective-origin: 0px 0px;
+
+  .pers-3d-left {
+    //transform: rotateY(20deg) translate3d(8px, 15px, 0px) scale(@scale);
+  }
+
+  .pers-3d-right {
+   //transform: rotateY(-20deg) translate3d(16px, 15px, 0px) scale(@scale);
+  }
+
+}
