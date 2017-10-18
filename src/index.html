@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Starship player</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
 </head>
 <body class="column">
 
@@ -56,11 +58,21 @@
         </div>
 
         <div class="playback-control-panel">
-            <button class="playback-play">▶️</button>
-            <button class="playback-pause">⏸</button>
-            <button class="playback-backward">⏪</button>
-            <button class="playback-forward">⏩</button>
-            <button class="playback-rewind">🔁</button>
+            <button class="playback-play">
+                <i class="material-icons">play_arrow</i>
+            </button>
+            <button class="playback-pause">
+                <i class="material-icons">pause</i>
+            </button>
+            <button class="playback-backward">
+                <i class="material-icons">skip_previous</i>
+            </button>
+            <button class="playback-forward">
+                <i class="material-icons">skip_next</i>
+            </button>
+            <button class="playback-rewind">
+                <i class="material-icons">replay</i>
+            </button>
             <select class="playback-speed">
                 <option>0.25</option>
                 <option>0.5</option>
@@ -70,10 +82,6 @@
                 <option>1.5</option>
                 <option>2</option>
             </select>
-        </div>
-
-        <div class="playback-control-panel">
-            some debug info here
         </div>
 
 
@@ -92,7 +100,6 @@
 
     </div>
 </div>
-
 
 </body>
 </html>

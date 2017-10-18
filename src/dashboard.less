@@ -1,5 +1,6 @@
 @import 'player.less';
 
+
 body {
   display: flex;
   align-items: center;
@@ -17,6 +18,10 @@ body {
 .column {
   display: flex;
   flex-direction: column;
+
+  &.front{
+    z-index: 1;
+  }
 }
 
 .perspective {
