@@ -24,6 +24,7 @@ let playbackSelector = {
     handler: '.playback-handler',
 };
 
+const playbackChangeEventName = 'playbackChange';
 
 export class Player {
 
@@ -49,24 +50,26 @@ export class Player {
         });
 
 
+        document.addEventListener(playbackChangeEventName, ({detail: frameIndex}) => this.shiftFrame(frameIndex));
+
         let $playbackBar = document.querySelector(`${playerSelector} ${playbackSelector.bar}`);
         $playbackBar.addEventListener('click', (event) => {
             let max = $playbackBar.clientWidth;
             let current = event.layerX;
 
-            let percentage = current/max;
+            let percentage = current / max;
             let frameIndex = Math.floor(this.totalFrameCount * percentage);
 
-            this.shiftFrame(frameIndex);
-        });
 
+            //this.shiftFrame(frameIndex);
+            //not current but all
+            document.dispatchEvent(new CustomEvent(playbackChangeEventName, {detail: frameIndex}));
+        });
 
 
         this.canvas = document.querySelector(`${playerSelector}>canvas`);
         this.canvasCtx = this.canvas.getContext('2d');
         this.canvasBuffer = this.canvasCtx.createImageData(this.canvas.width, this.canvas.height);
-
-
 
         //start playing
         //this.shiftFrame();
@@ -100,15 +103,15 @@ export class Player {
         this.currentFPS = 0;
 
         //todo: make fps component
-        setInterval(()=>{
+        setInterval(() => {
             this.currentFPS = this.framesDrawed;
             this.framesDrawed = 0;
-        },SEC);
+        }, SEC);
     }
 
     //PLAYER API
 
-    setPlaybackSpeed(speed = 'normal'){
+    setPlaybackSpeed(speed = 'normal') {
         this.fpsInterval = SEC / speeds.find(x => x.name === speed).value;
     }
 
@@ -144,7 +147,6 @@ export class Player {
     }
 
 
-
     addFrame(frame) {
         this.frameList.push({frame, timestamp: +new Date(), index: this.frameIndex++});
 
@@ -152,20 +154,19 @@ export class Player {
     }
 
 
-
     shiftFrame(frameIndex) {
 
-        if(frameIndex !== undefined) {
+        if (frameIndex !== undefined) {
             this.currentFrameIndex = frameIndex;
         }
 
-        this.$playbackProgress.value =this.currentFrameIndex;
+        this.$playbackProgress.value = this.currentFrameIndex;
 
         if (this.isPaused)return;
 
         //const frame = this.frameList[this.currentFrameIndex].frame;
 
-        const frameObj =this.frameList.find(x=> x.index === this.currentFrameIndex);
+        const frameObj = this.frameList.find(x => x.index === this.currentFrameIndex);
         //todo: decode frames before this
         if (frameObj) {
             const frame = frameObj.frame;
@@ -189,7 +190,7 @@ export class Player {
     }
 
 
-    drawText(ctx, { text = 'no text', font = 'monospace', size = 14, color = 'black', shadow = 'white', x = 0, y = 0 }){
+    drawText(ctx, {text = 'no text', font = 'monospace', size = 14, color = 'black', shadow = 'white', x = 0, y = 0}) {
         ctx.font = `${size}px ${font}`;
         ctx.fillStyle = color;
         //shadow
@@ -202,7 +203,7 @@ export class Player {
     }
 
 
-    animateSimple(){
+    animateSimple() {
         if (!this.isPaused) {
             this.shiftFrame();
             this.framesDrawed++;
@@ -215,8 +216,6 @@ export class Player {
         //todo: use this
         //requestAnimationFrame(() => this.animateSimple());
     }
-
-
 
 
     animate(now) {
@@ -248,7 +247,6 @@ export class Player {
 
         Rx.Observable.interval(1).throttle(() => Rx.Observable.timer(SEC / fps)).subscribe(x => console.log(x));
     }
-
 
 
     decode(buffer, width = config.videoSize.width, height = config.videoSize.height) {
