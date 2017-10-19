@@ -1,6 +1,6 @@
 import {WsClient} from './ws-client';
 import {FrameDecoder} from './frame-decoder';
-import {Player} from './player';
+import {Player} from './player/player';
 import config from './../config';
 
 import './dashboard.less';
