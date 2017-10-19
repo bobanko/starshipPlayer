@@ -15,9 +15,18 @@ module.exports = function wsServer(config) {
     wss.on('connection', (ws) => {
         console.log('client connected');
 
+        ws.isAlive = true;
+        ws.on('pong', () => ws.isAlive = true);
+
         let client = new StreamerClient();
 
-        client.onFrameReceived.subscribe((data) => ws.send(data));
+        client.onFrameReceived.subscribe((data) =>{
+            ws.send(data, (error)=>{
+                if(error) {
+                    console.log(`ws send fail`, error);
+                }
+            });
+        });
 
         let wsSend = new Rx.Subject();
         wsSend.subscribe(message => ws.send(message));
@@ -35,6 +44,19 @@ module.exports = function wsServer(config) {
         ws.on('close', () => client.dispose());
 
     });
+
+
+    setInterval(() => {
+        wss.clients.forEach((ws) => {
+            if (ws.isAlive === false) {
+                console.log('ws client terminated');
+                return ws.terminate();
+            }
+
+            ws.isAlive = false;
+            ws.ping('', false, true);
+        });
+    }, 30000);
 
 
     console.log(`WS running on http://localhost:${ config.port }`);
