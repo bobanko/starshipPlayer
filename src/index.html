@@ -6,71 +6,75 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
 </head>
-<body class="column">
+<body>
 
-<div class="dashboard">
-    <div class="player zoom back_camera_right">
-        <canvas width="240" height="134"></canvas>
+<div class="dashboard column">
+
+    <div class="column relative">
+
+        <div class="row">
+            <div class="player zoom back_camera_right">
+                <canvas width="240" height="134"></canvas>
+                <div class="playback-bar">
+                    <div class="playback-cache"></div>
+                    <div class="playback-progress">
+                        <div class="playback-handler"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="player zoom back_camera_left">
+                <canvas width="240" height="134"></canvas>
+                <div class="playback-bar">
+                    <div class="playback-cache"></div>
+                    <div class="playback-progress">
+                        <div class="playback-handler"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">-</div>
+
+        <div class="row">
+            <div class="player left_stereo-left pers-3d-left">
+                <canvas width="240" height="134"></canvas>
+                <div class="playback-bar">
+                    <div class="playback-cache"></div>
+                    <div class="playback-progress">
+                        <div class="playback-handler"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="player front_camera">
+                <canvas width="240" height="134"></canvas>
+                <div class="playback-bar">
+                    <div class="playback-cache"></div>
+                    <div class="playback-progress">
+                        <div class="playback-handler"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="player right_stereo-left pers-3d-right">
+                <canvas width="240" height="134"></canvas>
+                <div class="playback-bar">
+                    <div class="playback-cache"></div>
+                    <div class="playback-progress">
+                        <div class="playback-handler"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="playback-bar">
             <div class="playback-cache"></div>
             <div class="playback-progress">
                 <div class="playback-handler"></div>
             </div>
         </div>
-    </div>
-    <div class="player zoom back_camera_left">
-        <canvas width="240" height="134"></canvas>
-        <div class="playback-bar">
-            <div class="playback-cache"></div>
-            <div class="playback-progress">
-                <div class="playback-handler"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="dashboard">
-    <div class="player left_stereo-left pers-3d-left">
-        <canvas width="240" height="134"></canvas>
-        <div class="playback-bar">
-            <div class="playback-cache"></div>
-            <div class="playback-progress">
-                <div class="playback-handler"></div>
-            </div>
-        </div>
     </div>
-    <div class="player front_camera">
-        <canvas width="240" height="134"></canvas>
-        <div class="playback-bar">
-            <div class="playback-cache"></div>
-            <div class="playback-progress">
-                <div class="playback-handler"></div>
-            </div>
-        </div>
-    </div>
-    <div class="player right_stereo-left pers-3d-right">
-        <canvas width="240" height="134"></canvas>
-        <div class="playback-bar">
-            <div class="playback-cache"></div>
-            <div class="playback-progress">
-                <div class="playback-handler"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
-
-<div class="dashboard" style="position: relative;">
-    <div class="playback-bar">
-        <div class="playback-cache"></div>
-        <div class="playback-progress">
-            <div class="playback-handler"></div>
-        </div>
-    </div>
-</div>
-
-<div class="dashboard">
-    <div class="playback-control-panel">
+    <div class="row playback-control-panel">
         <button class="playback-play">
             <i class="material-icons">play_arrow</i>
         </button>
