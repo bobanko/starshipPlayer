@@ -16,7 +16,7 @@ TODO:
 ---
 basic mockup:
 ---
-![basic mockup](mock.png)
+![basic mockup](mocks/mock.png)
 
 
 DONE:
