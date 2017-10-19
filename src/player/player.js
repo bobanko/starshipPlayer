@@ -1,7 +1,7 @@
 import * as Rx from 'rxjs/Rx';
 
-import {PlaybackComponent} from './playback-component';
-import * as config from '../config';
+import {PlaybackComponent} from '../playback/playback-component';
+import * as config from '../../config';
 
 const SEC = 1000;
 const defaultFPS = 30;
