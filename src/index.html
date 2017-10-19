@@ -9,97 +9,95 @@
 <body class="column">
 
 <div class="dashboard">
-    <div class="column">
-        <div class="player back_camera_right">
-            <canvas width="240" height="134"></canvas>
-            <div class="playback-bar">
-                <div class="playback-cache"></div>
-                <div class="playback-progress">
-                    <div class="playback-handler"></div>
-                </div>
+    <div class="player zoom back_camera_right">
+        <canvas width="240" height="134"></canvas>
+        <div class="playback-bar">
+            <div class="playback-cache"></div>
+            <div class="playback-progress">
+                <div class="playback-handler"></div>
             </div>
         </div>
     </div>
-    <div class="column">
-        <div class="player back_camera_left">
-            <canvas width="240" height="134"></canvas>
-            <div class="playback-bar">
-                <div class="playback-cache"></div>
-                <div class="playback-progress">
-                    <div class="playback-handler"></div>
-                </div>
+    <div class="player zoom back_camera_left">
+        <canvas width="240" height="134"></canvas>
+        <div class="playback-bar">
+            <div class="playback-cache"></div>
+            <div class="playback-progress">
+                <div class="playback-handler"></div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="dashboard">
-    <div class="column perspective">
-        <div class="player left_stereo-left pers-3d-left">
-            <canvas width="240" height="134"></canvas>
-            <div class="playback-bar">
-                <div class="playback-cache"></div>
-                <div class="playback-progress">
-                    <div class="playback-handler"></div>
-                </div>
+    <div class="player left_stereo-left pers-3d-left">
+        <canvas width="240" height="134"></canvas>
+        <div class="playback-bar">
+            <div class="playback-cache"></div>
+            <div class="playback-progress">
+                <div class="playback-handler"></div>
             </div>
         </div>
     </div>
-    <div class="column front">
-
-        <div class="player front_camera">
-            <canvas width="240" height="134"></canvas>
-            <div class="playback-bar">
-                <div class="playback-cache"></div>
-                <div class="playback-progress">
-                    <div class="playback-handler"></div>
-                </div>
+    <div class="player front_camera">
+        <canvas width="240" height="134"></canvas>
+        <div class="playback-bar">
+            <div class="playback-cache"></div>
+            <div class="playback-progress">
+                <div class="playback-handler"></div>
             </div>
         </div>
-
-        <div class="playback-control-panel">
-            <button class="playback-play">
-                <i class="material-icons">play_arrow</i>
-            </button>
-            <button class="playback-pause">
-                <i class="material-icons">pause</i>
-            </button>
-            <button class="playback-backward">
-                <i class="material-icons">skip_previous</i>
-            </button>
-            <button class="playback-forward">
-                <i class="material-icons">skip_next</i>
-            </button>
-            <button class="playback-rewind">
-                <i class="material-icons">replay</i>
-            </button>
-            <select class="playback-speed">
-                <option>0.25</option>
-                <option>0.5</option>
-                <option>0.75</option>
-                <option selected>normal</option>
-                <option>1.25</option>
-                <option>1.5</option>
-                <option>2</option>
-            </select>
-        </div>
-
-
     </div>
-    <div class="column perspective">
-        <div class="player right_stereo-left pers-3d-right">
-            <canvas width="240" height="134"></canvas>
-            <div class="playback-bar">
-                <div class="playback-cache"></div>
-                <div class="playback-progress">
-                    <div class="playback-handler"></div>
-                </div>
+    <div class="player right_stereo-left pers-3d-right">
+        <canvas width="240" height="134"></canvas>
+        <div class="playback-bar">
+            <div class="playback-cache"></div>
+            <div class="playback-progress">
+                <div class="playback-handler"></div>
             </div>
         </div>
-
-
     </div>
 </div>
+
+
+<div class="dashboard" style="position: relative;">
+    <div class="playback-bar">
+        <div class="playback-cache"></div>
+        <div class="playback-progress">
+            <div class="playback-handler"></div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard">
+    <div class="playback-control-panel">
+        <button class="playback-play">
+            <i class="material-icons">play_arrow</i>
+        </button>
+        <button class="playback-pause">
+            <i class="material-icons">pause</i>
+        </button>
+        <button class="playback-backward">
+            <i class="material-icons">skip_previous</i>
+        </button>
+        <button class="playback-forward">
+            <i class="material-icons">skip_next</i>
+        </button>
+        <button class="playback-rewind">
+            <i class="material-icons">replay</i>
+        </button>
+        <select class="playback-speed">
+            <option>0.25</option>
+            <option>0.5</option>
+            <option>0.75</option>
+            <option selected>normal</option>
+            <option>1.25</option>
+            <option>1.5</option>
+            <option>2</option>
+        </select>
+    </div>
+</div>
+
 
 </body>
 </html>

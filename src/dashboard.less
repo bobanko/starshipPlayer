@@ -1,5 +1,7 @@
-@import 'player.less';
+@import 'player/player.less';
 
+@import 'playback/playback.less';
+@import 'control-panel.less';
 
 body {
   display: flex;
@@ -12,29 +14,21 @@ body {
 
 .dashboard {
   display: flex;
+  justify-content: center;
 
+  width: 750px;
+
+  background-color: gray;
+  transition: width 300ms ease-in;
+
+  .player.zoom{
+    flex: 1 1 240px;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .column {
   display: flex;
   flex-direction: column;
-
-  &.front{
-    z-index: 1;
-  }
-}
-
-.perspective {
-  @scale: 1.22;
-  perspective: 500px;
-  perspective-origin: 0px 0px;
-
-  .pers-3d-left {
-    //transform: rotateY(20deg) translate3d(8px, 15px, 0px) scale(@scale);
-  }
-
-  .pers-3d-right {
-   //transform: rotateY(-20deg) translate3d(16px, 15px, 0px) scale(@scale);
-  }
-
 }
