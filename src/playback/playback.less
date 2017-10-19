@@ -1,0 +1,60 @@
+@playback-bar-size: 3px;
+
+.playback-bar {
+  position: absolute;
+  display: flex;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: @playback-bar-size;
+  transition: all 300ms;
+
+  background-color: fade(white, 30%);
+
+  .playback-cache, .playback-progress, .playback-handler {
+    position: absolute;
+    height: 100%;
+  }
+
+  .playback-progress, .playback-cache {
+    transition: width 150ms ease-in;
+  }
+
+  .playback-cache {
+    background-color: fade(white, 35%);
+  }
+
+  .playback-progress {
+    background-color: #F12B24;
+  }
+
+  .playback-handler {
+    box-sizing: border-box;
+
+    right: 0;
+    width: 0;
+    height: 0;
+    border-radius: 0;
+    background-color: #F12B24;
+
+    //border: 2px solid rgba(0, 0, 0, 0.38);
+    transition: all 300ms;
+  }
+
+}
+
+@playback-bar-hover-size: @playback-bar-size*2;
+
+div:hover > .playback-bar {
+  height: @playback-bar-hover-size;
+  margin-bottom: @playback-bar-hover-size;
+  cursor: pointer;
+
+  .playback-progress > .playback-handler {
+    width: @playback-bar-hover-size;
+    height: @playback-bar-hover-size;
+    border-radius: @playback-bar-hover-size;
+    box-shadow: 0 0 0 5px #F12B24;
+  }
+}

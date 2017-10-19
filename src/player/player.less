@@ -1,0 +1,31 @@
+@canvas_bg: lighten(black, 10%);
+
+//todo: remove hardcoded sizes
+@camera_width: 240px;
+@camera_height: 134px;
+
+.player {
+  position: relative;
+  display: flex;
+  background-color: @canvas_bg;
+  width: @camera_width;
+  height: @camera_height;
+
+  //box-shadow: 0 0 0 1px lighten(@canvas_bg, 10%);
+  box-sizing: border-box;
+  //border: 1px solid lighten(@canvas_bg, 10%);
+  box-shadow: 0 0 0px 1px lighten(@canvas_bg, 10%);
+
+  canvas {
+    width: inherit;
+    height: inherit;
+  }
+}
+
+//@camera_front_modifier: 1.5;
+@camera_front_modifier: 1.10;
+.front_camera {
+  width: @camera_width*@camera_front_modifier;
+  height: @camera_height*@camera_front_modifier;
+}
+
