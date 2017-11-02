@@ -1,7 +1,7 @@
 import * as Rx from 'rxjs/Rx';
-
-import {PlaybackComponent} from '../playback/playback-component';
 import * as config from '../../config';
+import {drawText, FPS} from './fps';
+
 
 const SEC = 1000;
 const defaultFPS = 30;
@@ -17,79 +17,24 @@ const speeds = [
     { name: '2',		value: defaultFPS * 2 },
 ];
 
-let playbackSelector = {
-    bar: '.playback-bar',
-    cache: '.playback-cache',
-    progress: '.playback-progress',
-    handler: '.playback-handler',
-};
-
 const playbackChangeEventName = 'playbackChange';
 
 export class Player {
 
-    constructor(playerSelector) {
+    constructor(playerSelector, {cacheComponent, progressComponent }) {
 
+        //todo: move framelist to lib
         this.frameList = [];
         this.totalFrameCount = 0;
-        //this.frameListSubject = new Rx.Subject();
 
-        // this.frameListSubject
-        // //.throttleTime(100)
-        //     .zip(Rx.Observable.timer(0, 1000), x => x)
-        //     .map(frame => {return frame;})
-        //     .subscribe(frame => this.decode(frame));
-
-        this.$playbackCache = new PlaybackComponent({
-            selector: `${playerSelector} ${playbackSelector.cache}`,
-            //totalFrameCount: this.totalFrameCount
-        });
-        this.$playbackProgress = new PlaybackComponent({
-            selector: `${playerSelector} ${playbackSelector.progress}`,
-            //totalFrameCount: this.totalFrameCount
-        });
-
-
-        document.addEventListener(playbackChangeEventName, ({detail: frameIndex}) => this.shiftFrame(frameIndex));
-
-        let $playbackBar = document.querySelector(`${playerSelector} ${playbackSelector.bar}`);
-        $playbackBar.addEventListener('click', (event) => {
-            let max = $playbackBar.clientWidth;
-            let current = event.layerX;
-
-            let percentage = current / max;
-            let frameIndex = Math.floor(this.totalFrameCount * percentage);
-
-
-            //this.shiftFrame(frameIndex);
-            //not current but all
-            document.dispatchEvent(new CustomEvent(playbackChangeEventName, {detail: frameIndex}));
-        });
-
+        this.$playbackCache = cacheComponent;
+        this.$playbackProgress = progressComponent;
 
         this.canvas = document.querySelector(`${playerSelector}>canvas`);
         this.canvasCtx = this.canvas.getContext('2d');
         this.canvasBuffer = this.canvasCtx.createImageData(this.canvas.width, this.canvas.height);
 
-        //start playing
-        //this.shiftFrame();
-
-        let fpsCounter = document.querySelector('.fps');
-
-        //fps counter
-        let lastSampleTime = 0;
-
-        this.frameCount = 0;
-        setInterval(() => {
-            let now = performance.now();
-            if (this.frameCount > 0) {
-                let currentFps = (this.frameCount / (now - lastSampleTime) * 1000).toFixed(2);
-                fpsCounter.textContent = currentFps;
-                this.frameCount = 0;
-            }
-            lastSampleTime = now;
-        }, SEC);
-
+        this.fpsComponent = new FPS(this.canvasCtx, {x: 190, y: 15});
 
         this.setPlaybackSpeed('normal');
         this.animateSimple();
@@ -99,14 +44,6 @@ export class Player {
 
         this.frameIndex = 0;
 
-        this.framesDrawed = 0;
-        this.currentFPS = 0;
-
-        //todo: make fps component
-        setInterval(() => {
-            this.currentFPS = this.framesDrawed;
-            this.framesDrawed = 0;
-        }, SEC);
     }
 
     //PLAYER API
@@ -164,88 +101,33 @@ export class Player {
 
         if (this.isPaused)return;
 
-        //const frame = this.frameList[this.currentFrameIndex].frame;
-
         const frameObj = this.frameList.find(x => x.index === this.currentFrameIndex);
         //todo: decode frames before this
         if (frameObj) {
-            const frame = frameObj.frame;
-
-            let decodedFrameBuffer = this.decode(frame);
+            let decodedFrameBuffer = this.decode(frameObj.frame);
 
             this.canvasCtx.putImageData(decodedFrameBuffer, 0, 0);
 
-            this.drawText(this.canvasCtx, {
+            drawText(this.canvasCtx, {
                 text: `curr:${this.currentFrameIndex}/cached:${ this.frameList.length}/total:${this.totalFrameCount}`,
                 x: 0, y: 120
-            });
-
-            this.drawText(this.canvasCtx, {
-                text: `FPS:${this.currentFPS}`,
-                x: 190, y: 15
             });
 
             this.currentFrameIndex++;
         }
     }
 
-
-    drawText(ctx, {text = 'no text', font = 'monospace', size = 14, color = 'black', shadow = 'white', x = 0, y = 0}) {
-        ctx.font = `${size}px ${font}`;
-        ctx.fillStyle = color;
-        //shadow
-        ctx.shadowColor = shadow;
-        ctx.shadowOffsetX = 1;
-        ctx.shadowOffsetY = 1;
-        ctx.shadowBlur = 0;
-
-        this.canvasCtx.fillText(text, x, y);
-    }
-
-
     animateSimple() {
         if (!this.isPaused) {
             this.shiftFrame();
-            this.framesDrawed++;
         }
 
         setTimeout(() => {
             this.animateSimple();
         }, this.fpsInterval);
 
-        //todo: use this
-        //requestAnimationFrame(() => this.animateSimple());
-    }
-
-
-    animate(now) {
-        // request another frame
-        requestAnimationFrame((time) => this.animate(time));
-        if (this.isPaused)return;
-
-        // calc elapsed time since last loop
-        let elapsed = now - this.lastDrawTime;
-
-        // if enough time has elapsed, draw the next frame
-        if (elapsed > this.fpsInterval) {
-            // Get ready for next frame by setting lastDrawTime=now, but...
-            // Also, adjust for fpsInterval not being multiple of 16.67
-            this.lastDrawTime = now - (elapsed % this.fpsInterval);
-
-            this.frameCount++;
-
-            //drawNextFrame(now, canvas, ctx, currentFps);
-            this.shiftFrame();
-
-        }
-    }
-
-
-    fpsController() {
-
-        let fps = 0; //0 is maxfps speed, 1 is 1
-
-        Rx.Observable.interval(1).throttle(() => Rx.Observable.timer(SEC / fps)).subscribe(x => console.log(x));
+        this.fpsComponent.draw();
+        //todo: use requestAnimationFrame
     }
 
 
