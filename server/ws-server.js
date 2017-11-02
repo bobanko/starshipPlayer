@@ -59,6 +59,6 @@ module.exports = function wsServer(config) {
     }, 30000);
 
 
-    console.log(`WS running on http://localhost:${ config.port }`);
+    console.log(`WS running on http://${config.hostName}:${ config.port }`);
 };
 

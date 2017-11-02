@@ -46,7 +46,7 @@ module.exports = {
     ],
 
     devServer: {
-        //host: 'localhost', //default
+        host: config.hostName,
         //port: 8080, //default
         port: config.httpPort,
         contentBase: './dist',

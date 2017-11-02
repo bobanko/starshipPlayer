@@ -10,5 +10,5 @@ module.exports = function (config) {
         file.serve(req, res);
     }).listen(config.port);
 
-    console.log(`Server running on http://localhost:${config.port}`);
+    console.log(`Server running on http://${config.hostName}:${config.port}`);
 };

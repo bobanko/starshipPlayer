@@ -1,6 +1,7 @@
 const config = {
+    hostName: 'localhost',
     wsPort: 8091,
-    httpPort: 8080,
+    httpPort: 8082,
     videosDir: './videos/',
     //videosDir: './videos_test2/',
     // videosDir: './vids_test2/',
