@@ -1,5 +1,5 @@
 const Rx = require('rxjs/Rx');
-import * as Decoder from "../lib/Decoder";
+import * as Decoder from '../lib/Decoder';
 
 export class FrameDecoder {
 
