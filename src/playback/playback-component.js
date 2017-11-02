@@ -19,4 +19,9 @@ export class PlaybackComponent {
         let percentage = Math.floor(this._value / this.totalFrameCount * 100);
         this._element.style.width = `${percentage}%`;
     }
+
+
+    render(){
+        //todo: impl markup
+    }
 }
