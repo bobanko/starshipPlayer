@@ -31,3 +31,33 @@
   height: @camera_height*@camera_front_modifier;
 }
 
+.loader {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > i{
+    font-size: 64px;
+    color: black;
+    opacity: 0;
+    transition: opacity 300ms;
+  }
+
+  &.enabled > i {
+    animation: 1000ms loader ease-in-out infinite;
+    opacity: 0.5;
+  }
+}
+
+@keyframes loader {
+  from {
+    transform: rotateZ(0deg);
+  }
+
+  to {
+    transform: rotateZ(360deg);
+  }
+}

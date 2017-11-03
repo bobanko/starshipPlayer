@@ -1,74 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Starship player</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>Starship player</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet">
 </head>
 <body>
 
 <div class="dashboard column">
 
-    <div class="column relative">
+	<div class="column relative">
 
-        <div class="row">
-            <div class="player zoom back_camera_right">
-                <canvas width="240" height="134"></canvas>
-            </div>
-            <div class="player zoom back_camera_left">
-                <canvas width="240" height="134"></canvas>
-            </div>
-        </div>
-        <div class="row">
-            <div class="player left_stereo-left pers-3d-left">
-                <canvas width="240" height="134"></canvas>
-            </div>
-            <div class="player front_camera">
-                <canvas width="240" height="134"></canvas>
-            </div>
-            <div class="player right_stereo-left pers-3d-right">
-                <canvas width="240" height="134"></canvas>
+		<div class="row">
 
-            </div>
-        </div>
+			<div class="player zoom back_camera_right">
+				<canvas width="240" height="134"></canvas>
+				<div class="loader">
+					<i class="material-icons">cached</i>
+				</div>
+			</div>
 
-        <div id="playback-main" class="playback-bar">
-            <div class="playback-cache"></div>
-            <div class="playback-progress">
-                <div class="playback-handler"></div>
-            </div>
-        </div>
 
-    </div>
+			<div class="player zoom back_camera_left">
+				<canvas width="240" height="134"></canvas>
+				<div class="loader">
+					<i class="material-icons">cached</i>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="player left_stereo-left pers-3d-left">
+				<canvas width="240" height="134"></canvas>
+				<div class="loader">
+					<i class="material-icons">cached</i>
+				</div>
+			</div>
+			<div class="player front_camera">
+				<canvas width="240" height="134"></canvas>
+				<div class="loader">
+					<i class="material-icons">cached</i>
+				</div>
+			</div>
+			<div class="player right_stereo-left pers-3d-right">
+				<canvas width="240" height="134"></canvas>
+				<div class="loader">
+					<i class="material-icons">cached</i>
+				</div>
+			</div>
+		</div>
 
-    <div class="row playback-control-panel">
-        <button class="playback-play">
-            <i class="material-icons">play_arrow</i>
-        </button>
-        <button class="playback-pause">
-            <i class="material-icons">pause</i>
-        </button>
+		<div id="playback-main" class="playback-bar">
+			<div class="playback-cache"></div>
+			<div class="playback-progress">
+				<div class="playback-handler"></div>
+			</div>
+		</div>
 
-        <button class="playback-backward">
-            <i class="material-icons">skip_previous</i>
-        </button>
-        <button class="playback-forward">
-            <i class="material-icons">skip_next</i>
-        </button>
-        <button class="playback-rewind">
-            <i class="material-icons">replay</i>
-        </button>
-        <select class="playback-speed">
-            <option>0.25</option>
-            <option>0.5</option>
-            <option>0.75</option>
-            <option selected>normal</option>
-            <option>1.25</option>
-            <option>1.5</option>
-            <option>2</option>
-        </select>
-    </div>
+	</div>
+
+	<div class="row playback-control-panel">
+		<button class="playback-play">
+			<i class="material-icons">play_arrow</i>
+		</button>
+		<button class="playback-pause">
+			<i class="material-icons">pause</i>
+		</button>
+
+		<button class="playback-backward">
+			<i class="material-icons">skip_previous</i>
+		</button>
+		<button class="playback-forward">
+			<i class="material-icons">skip_next</i>
+		</button>
+		<button class="playback-rewind">
+			<i class="material-icons">replay</i>
+		</button>
+		<select class="playback-speed">
+			<option>0.25</option>
+			<option>0.5</option>
+			<option>0.75</option>
+			<option selected>normal</option>
+			<option>1.25</option>
+			<option>1.5</option>
+			<option>2</option>
+		</select>
+	</div>
 </div>
 
 

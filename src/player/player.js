@@ -1,7 +1,5 @@
 import { drawText, FPS } from './fps';
 import { decodeFrameBuffer } from './canvasBufferDecoder';
-import { PlaybackComponent } from "../playback/playback-component";
-
 
 const SEC = 1000;
 const defaultFPS = 30;
@@ -24,6 +22,7 @@ export class Player {
 
 		this.video = video;
 
+		this.$loader = document.querySelector(`${playerSelector} .loader`);
 		this.canvas = document.querySelector(`${playerSelector}>canvas`);
 		this.canvasCtx = this.canvas.getContext('2d');
 		this.canvasBuffer = this.canvasCtx.createImageData(this.canvas.width, this.canvas.height);
@@ -37,7 +36,11 @@ export class Player {
 		this.isPaused = false;
 
 		this.frameIndex = 0;
+		this.isLoading = false;
+	}
 
+	set isLoading(value) {
+		this.$loader.classList.toggle('enabled', value);
 	}
 
 	//PLAYER API
@@ -97,6 +100,9 @@ export class Player {
 			});
 
 			this.currentFrameIndex++;
+			this.isLoading = false;
+		} else {
+			this.isLoading = true;
 		}
 	}
 
@@ -112,7 +118,6 @@ export class Player {
 		this.fpsComponent.draw();
 		//todo: use requestAnimationFrame
 	}
-
 
 
 }
