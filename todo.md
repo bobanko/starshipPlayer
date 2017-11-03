@@ -2,7 +2,6 @@ TODO:
 ---
 
 - `construct most comfortable and ergonomic view in your opinion to an supervisor`
-    - add 3d transformed side players to simulate 3d camera view (?)
 
 - readonly at first, it should display:
     - total videos length
