@@ -1,25 +1,18 @@
 /* controls playback elements appearance */
 export class PlaybackComponent {
-    constructor({selector, totalFrameCount = 1}) {
+    constructor({selector, getCurrent, getMax}) {
         this._element = document.querySelector(selector);
-        this._value = 0;
-        this.totalFrameCount = totalFrameCount;
-    }
+        this.getValue = getCurrent;
+        this.getMaxValue = getMax;
 
-    get value() {
-        return this._value;
-    }
-
-    set value(value) {
-        this._value = value;// Math.max(0, Math.min(value, 100));
-        requestAnimationFrame(() => this.update());
+	    this.update();
     }
 
     update() {
-        let percentage = Math.floor(this._value / this.totalFrameCount * 100);
+        let percentage = Math.floor(this.getValue() / this.getMaxValue() * 100);
         this._element.style.width = `${percentage}%`;
+	    requestAnimationFrame(() => this.update());
     }
-
 
     render(){
         //todo: impl markup
