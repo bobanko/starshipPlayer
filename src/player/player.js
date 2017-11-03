@@ -15,6 +15,7 @@ const speeds = [
 	{name: '2', value: defaultFPS * 2},
 ];
 
+const loaderEnabledClass = 'enabled';
 
 export class Player {
 
@@ -36,11 +37,21 @@ export class Player {
 		this.isPaused = false;
 
 		this.frameIndex = 0;
-		this.isLoading = false;
+
+		this.showFps = true;
+		this.showDebugInfo = true;
+
+		this._isLoading = false;
 	}
 
+
 	set isLoading(value) {
-		this.$loader.classList.toggle('enabled', value);
+		this._isLoading = value;
+		this.$loader.classList.toggle(loaderEnabledClass, this._isLoading);
+	}
+
+	get isLoading() {
+		return this._isLoading;
 	}
 
 	//PLAYER API
@@ -94,11 +105,6 @@ export class Player {
 
 			this.canvasCtx.putImageData(decodedFrameBuffer, 0, 0);
 
-			drawText(this.canvasCtx, {
-				text: `curr:${this.currentFrameIndex}/cached:${this.video.cachedFrameCount}/total:${this.video.totalFrameCount}`,
-				x: 0, y: 120
-			});
-
 			this.currentFrameIndex++;
 			this.isLoading = false;
 		} else {
@@ -115,7 +121,18 @@ export class Player {
 			this.animateSimple();
 		}, this.fpsInterval);
 
-		this.fpsComponent.draw();
+
+		if (this.showFps) {
+			this.fpsComponent.draw();
+		}
+
+		if (this.showDebugInfo) {
+			drawText(this.canvasCtx, {
+				text: `curr:${this.currentFrameIndex}/cached:${this.video.cachedFrameCount}/total:${this.video.totalFrameCount}`,
+				x: 0, y: 120
+			});
+		}
+
 		//todo: use requestAnimationFrame
 	}
 
