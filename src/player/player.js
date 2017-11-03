@@ -84,8 +84,6 @@ export class Player {
 			this.currentFrameIndex = frameIndex;
 		}
 
-		if (this.isPaused) return;
-
 		const frameObj = this.video.getFrame(this.currentFrameIndex);
 		//todo: decode frames before this?
 		if (frameObj) {
