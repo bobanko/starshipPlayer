@@ -4,8 +4,8 @@ import {Player} from './player/player';
 import config from './../config';
 
 import './dashboard.less';
-import {PlaybackComponent} from "./playback/playback-component";
-import {VideoLib} from "./video-lib";
+import {PlaybackComponent} from './playback/playback-component';
+import {VideoLib} from './video-lib';
 
 
 //todo: move playback controls singletone here
@@ -17,14 +17,7 @@ let playbackSelector = {
     handler: '#playback-main .playback-handler',
 };
 
-let cacheComponent = new PlaybackComponent({
-    selector: `${playbackSelector.cache}`,
-    //totalFrameCount: this.totalFrameCount
-});
-let progressComponent = new PlaybackComponent({
-    selector: `${playbackSelector.progress}`,
-    //totalFrameCount: this.totalFrameCount
-});
+
 
 let playbackBar = document.querySelector(playbackSelector.bar);
 playbackBar.addEventListener('click', (event) => {
@@ -34,32 +27,41 @@ playbackBar.addEventListener('click', (event) => {
     let percentage = current / max;
 
     players.forEach(player => {
-        let frameIndex = Math.floor(player.totalFrameCount * percentage);
+        let frameIndex = Math.floor(player.video.totalFrameCount * percentage);
         player.shiftFrame(frameIndex);
     });
 
 });
 
 
+
 const players = [];
 
-let cameras = ['front_camera', 'left_stereo-left', 'right_stereo-left', 'back_camera_left', 'back_camera_right'];
+let videoNames = ['front_camera', 'left_stereo-left', 'right_stereo-left', 'back_camera_left', 'back_camera_right'];
 
 const wsUrl = `ws://${config.hostName}:${config.wsPort}`;
-const videoLib = new VideoLib({wsUrl});
+const videoLib = new VideoLib({wsUrl, videoNames});
 
-cameras.forEach(cameraName => {
-    let playerSelector = `.player.${cameraName}`;
-    const player = new Player(playerSelector, {cacheComponent, progressComponent, playbackBar});
+videoNames.forEach(videoName => {
+	let video = videoLib.getVideo(videoName);
+	let playerSelector = `.player.${videoName}`;
+	const player = new Player(playerSelector, {video});
+
     players.push(player);
-
-    let libLoad = videoLib.loadVideo(cameraName);
-
-    //todo: move framelist to lib
-    libLoad.onFrameGot((frame) => player.addFrame(frame));
-    libLoad.onTotalGot(frameCount => player.setTotalFrameCount(frameCount));
-
 });
+
+
+let cacheComponent = new PlaybackComponent({
+	selector: `${playbackSelector.cache}`,
+	getCurrent: ()=> videoLib.getCachedFrameCount(),
+	getMax: ()=> videoLib.getTotalFrameCount(),
+});
+let progressComponent = new PlaybackComponent({
+	selector: `${playbackSelector.progress}`,
+	getCurrent: ()=> players[0].currentFrameIndex,
+	getMax: ()=> videoLib.getTotalFrameCount(),
+});
+
 
 
 document.querySelector(`.playback-control-panel .playback-${'speed'}`).addEventListener('change', (event) => {
